@@ -1,0 +1,22 @@
+{
+  "name": "advocate-gopal-tiwari",
+  "version": "1.0.0",
+  "description": "Advocate Gopal Tiwari - Legal Practice Website",
+  "scripts": {
+    "dev": "vite --host --port 3000 --open",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite --host --port 3000 --open"
+  },
+  "keywords": [
+    "advocate",
+    "legal",
+    "varanasi",
+    "lawyer"
+  ],
+  "author": "Advocate Gopal Tiwari",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}
