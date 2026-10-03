@@ -2160,13 +2160,56 @@ textarea.form-control {
   background: var(--navy-dark);
   padding: 16px 0;
   border-top: 1px solid rgba(176, 141, 87, 0.2);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: #8C94A0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+}
+
+.footer-bottom-legal {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-bottom-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #9EA8B6;
+  font-size: 0.78rem;
+}
+
+.credit-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(176, 141, 87, 0.12);
+  border: 1px solid rgba(176, 141, 87, 0.35);
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+}
+
+.credit-brand-link:hover {
+  background: var(--accent-gold);
+  color: var(--primary-navy);
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(176, 141, 87, 0.35);
+}
+
+.credit-brand-link svg {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -2935,7 +2978,16 @@ html.bci-accepted #bciDisclaimerModal {
   .footer-bottom {
     flex-direction: column;
     text-align: center;
-    gap: 6px;
+    gap: 8px;
+  }
+
+  .footer-bottom-legal {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer-bottom-credit {
+    justify-content: center;
   }
 
   /* Floating action buttons */
