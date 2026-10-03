@@ -889,8 +889,10 @@ iframe.goog-te-banner-frame,
   height: 100%;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: scale(1.03);
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1.02);
+  pointer-events: none;
+  will-change: opacity, transform;
 }
 
 .about-carousel-slide.active {
@@ -898,6 +900,7 @@ iframe.goog-te-banner-frame,
   visibility: visible;
   transform: scale(1);
   z-index: 2;
+  pointer-events: auto;
 }
 
 .about-carousel-slide img {
@@ -907,6 +910,16 @@ iframe.goog-te-banner-frame,
   object-position: center top;
   border-radius: var(--radius-sm);
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.about-carousel-slide img.court-img {
+  object-position: center 25%;
+}
+
+.about-carousel-slide img.portrait-img {
+  object-position: center top;
 }
 
 .carousel-slide-badge {
@@ -935,7 +948,7 @@ iframe.goog-te-banner-frame,
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(7, 21, 39, 0.8);
+  background: rgba(7, 21, 39, 0.82);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border: 1px solid var(--accent-gold);
@@ -945,8 +958,9 @@ iframe.goog-te-banner-frame,
   justify-content: center;
   cursor: pointer;
   z-index: 5;
-  opacity: 0.4;
+  opacity: 0.7;
   transition: opacity 0.25s ease, background-color 0.2s ease, transform 0.2s ease;
+  touch-action: manipulation;
 }
 
 .about-carousel-wrapper:hover .carousel-nav-btn {
@@ -961,11 +975,50 @@ iframe.goog-te-banner-frame,
 }
 
 .carousel-nav-btn.prev {
-  left: 12px;
+  left: 10px;
 }
 
 .carousel-nav-btn.next {
-  right: 12px;
+  right: 10px;
+}
+
+/* Mobile adjustments for carousel */
+@media (max-width: 768px) {
+  .about-carousel-slides {
+    height: 330px;
+  }
+
+  .carousel-nav-btn {
+    opacity: 0.9;
+    width: 36px;
+    height: 36px;
+  }
+
+  .carousel-slide-badge {
+    bottom: 10px;
+    left: 10px;
+    font-size: 0.70rem;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-carousel-slides {
+    height: 290px;
+  }
+
+  .carousel-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .carousel-nav-btn.prev {
+    left: 6px;
+  }
+
+  .carousel-nav-btn.next {
+    right: 6px;
+  }
 }
 
 /* Carousel Indicators (Dots) */

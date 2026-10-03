@@ -20,7 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="assets/css/style.css?v=1.4">
+  <link rel="stylesheet" href="assets/css/style.css?v=1.6">
   <link rel="icon" type="image/png" href="assets/images/advocate-logo.png">
 
   <!-- BCI Disclaimer Session Check (prevents layout flicker) -->
@@ -390,12 +390,12 @@
         <div class="about-visual">
           <div class="about-image-wrapper about-carousel-wrapper" id="aboutCarousel">
             <div class="about-carousel-slides">
-              <div class="about-carousel-slide active">
-                <img src="assets/images/gopal-tiwari-court.jpg" alt="Advocate Gopal Tiwari with legal colleagues at Civil Court, Varanasi">
+              <div class="about-carousel-slide active" data-index="0">
+                <img src="assets/images/gopal-tiwari-court.jpg" alt="Advocate Gopal Tiwari with legal colleagues at Civil Court, Varanasi" class="court-img" loading="eager" fetchpriority="high">
                 <span class="carousel-slide-badge">Civil Court, Varanasi</span>
               </div>
-              <div class="about-carousel-slide">
-                <img src="assets/images/gopal-tiwari-portrait.jpg" alt="Advocate Gopal Tiwari - Professional Court Advocate">
+              <div class="about-carousel-slide" data-index="1">
+                <img src="assets/images/gopal-tiwari-portrait.jpg" alt="Advocate Gopal Tiwari - Professional Court Advocate" class="portrait-img" loading="eager">
                 <span class="carousel-slide-badge">Advocate Gopal Tiwari</span>
               </div>
             </div>
@@ -414,6 +414,126 @@
               <span class="carousel-dot" data-index="1" aria-label="Photo 2"></span>
             </div>
           </div>
+
+          <!-- Immediate Carousel Engine (Zero-latency desktop & mobile auto-swipe) -->
+          <script>
+            (function() {
+              function setupAboutCarousel() {
+                var c = document.getElementById('aboutCarousel');
+                if (!c || c.dataset.carouselInit === 'true') return;
+                c.dataset.carouselInit = 'true';
+                var slides = c.querySelectorAll('.about-carousel-slide');
+                var dots = c.querySelectorAll('.carousel-dot');
+                var prev = document.getElementById('carouselPrevBtn');
+                var next = document.getElementById('carouselNextBtn');
+                if (slides.length <= 1) return;
+
+                var cur = 0;
+                var timer = null;
+                var interval = 3000;
+
+                function show(idx) {
+                  if (idx >= slides.length) idx = 0;
+                  if (idx < 0) idx = slides.length - 1;
+                  cur = idx;
+                  for (var i = 0; i < slides.length; i++) {
+                    if (i === cur) slides[i].classList.add('active');
+                    else slides[i].classList.remove('active');
+                  }
+                  for (var j = 0; j < dots.length; j++) {
+                    if (j === cur) dots[j].classList.add('active');
+                    else dots[j].classList.remove('active');
+                  }
+                }
+
+                function nextSlide() { show(cur + 1); }
+                function prevSlide() { show(cur - 1); }
+
+                function start() {
+                  if (timer) clearInterval(timer);
+                  timer = setInterval(nextSlide, interval);
+                }
+
+                function restart() {
+                  if (timer) clearInterval(timer);
+                  start();
+                }
+
+                if (next) {
+                  next.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nextSlide();
+                    restart();
+                  });
+                }
+
+                if (prev) {
+                  prev.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    prevSlide();
+                    restart();
+                  });
+                }
+
+                dots.forEach(function(dot, idx) {
+                  dot.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    show(idx);
+                    restart();
+                  });
+                });
+
+                // Desktop hover pause only
+                try {
+                  if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                    c.addEventListener('mouseenter', function() { if (timer) clearInterval(timer); });
+                    c.addEventListener('mouseleave', start);
+                  }
+                } catch(e) {}
+
+                // Mobile touch swipe gestures
+                var sx = 0, sy = 0, swiping = false;
+                c.addEventListener('touchstart', function(e) {
+                  if (e.touches && e.touches[0]) {
+                    sx = e.touches[0].clientX;
+                    sy = e.touches[0].clientY;
+                    swiping = true;
+                  }
+                }, { passive: true });
+
+                c.addEventListener('touchend', function(e) {
+                  if (!swiping || !e.changedTouches || !e.changedTouches[0]) return;
+                  swiping = false;
+                  var dx = sx - e.changedTouches[0].clientX;
+                  var dy = sy - e.changedTouches[0].clientY;
+                  if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0) nextSlide();
+                    else prevSlide();
+                    restart();
+                  }
+                }, { passive: true });
+
+                c.addEventListener('touchcancel', function() { swiping = false; }, { passive: true });
+
+                document.addEventListener('visibilitychange', function() {
+                  if (document.hidden) { if (timer) clearInterval(timer); }
+                  else { start(); }
+                });
+
+                start();
+              }
+
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', setupAboutCarousel);
+              } else {
+                setupAboutCarousel();
+              }
+            })();
+          </script>
+
           <div class="about-quote-card">
             <div class="about-quote-icon">“</div>
             <div class="about-quote-text">
@@ -1744,7 +1864,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="assets/js/main.js?v=1.4"></script>
+  <script src="assets/js/main.js?v=1.6"></script>
 
   <!-- Interactive Map Switcher Script -->
   <script>

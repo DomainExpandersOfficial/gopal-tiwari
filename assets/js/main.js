@@ -336,11 +336,14 @@ function initNavbar() {
 }
 
 /* ==========================================================================
-   2B. ABOUT PHOTO AUTO-SWIPE CAROUSEL
+   2B. ABOUT PHOTO AUTO-SWIPE CAROUSEL (DESKTOP & MOBILE RESILIENT)
    ========================================================================== */
 function initAboutCarousel() {
   const wrapper = document.getElementById('aboutCarousel');
   if (!wrapper) return;
+
+  if (wrapper.dataset.carouselInit === 'true') return;
+  wrapper.dataset.carouselInit = 'true';
 
   const slides = wrapper.querySelectorAll('.about-carousel-slide');
   const dots = wrapper.querySelectorAll('.carousel-dot');
@@ -351,7 +354,7 @@ function initAboutCarousel() {
 
   let currentIndex = 0;
   let timer = null;
-  const interval = 3500; // 3.5 seconds auto swipe
+  const interval = 3000; // 3 seconds smooth auto-swipe
 
   function showSlide(index) {
     if (index >= slides.length) index = 0;
@@ -395,55 +398,90 @@ function initAboutCarousel() {
     }
   }
 
+  function restartAutoPlay() {
+    stopAutoPlay();
+    startAutoPlay();
+  }
+
   if (nextBtn) {
     nextBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       nextSlide();
-      startAutoPlay();
+      restartAutoPlay();
     });
   }
 
   if (prevBtn) {
     prevBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       prevSlide();
-      startAutoPlay();
+      restartAutoPlay();
     });
   }
 
   dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
+    dot.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       showSlide(i);
-      startAutoPlay();
+      restartAutoPlay();
     });
   });
 
-  // Pause on hover
-  wrapper.addEventListener('mouseenter', stopAutoPlay);
-  wrapper.addEventListener('mouseleave', startAutoPlay);
+  // ONLY pause on hover on true desktop pointer devices (never touch screens)
+  try {
+    if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      wrapper.addEventListener('mouseenter', stopAutoPlay);
+      wrapper.addEventListener('mouseleave', startAutoPlay);
+    }
+  } catch (err) {}
 
   // Mobile Touch Swipe Support
   let touchStartX = 0;
-  let touchEndX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
 
   wrapper.addEventListener('touchstart', (e) => {
-    if (e.changedTouches && e.changedTouches[0]) {
-      touchStartX = e.changedTouches[0].screenX;
+    if (e.touches && e.touches[0]) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = true;
     }
-    stopAutoPlay();
+    // Note: Do NOT stopAutoPlay() here; scrolling page should never kill carousel timer
   }, { passive: true });
 
   wrapper.addEventListener('touchend', (e) => {
-    if (e.changedTouches && e.changedTouches[0]) {
-      touchEndX = e.changedTouches[0].screenX;
-      if (touchStartX - touchEndX > 40) {
+    if (!isSwiping || !e.changedTouches || !e.changedTouches[0]) return;
+    isSwiping = false;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
         nextSlide();
-      } else if (touchEndX - touchStartX > 40) {
+      } else {
         prevSlide();
       }
+      restartAutoPlay();
     }
-    startAutoPlay();
   }, { passive: true });
+
+  wrapper.addEventListener('touchcancel', () => {
+    isSwiping = false;
+  }, { passive: true });
+
+  // Resume autoplay when tab becomes visible again
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
+  });
 
   startAutoPlay();
 }
