@@ -369,15 +369,25 @@ iframe.goog-te-banner-frame,
 }
 
 .brand-emblem {
-  width: 36px;
-  height: 36px;
-  background: rgba(176, 141, 87, 0.15);
+  width: 44px;
+  height: 44px;
+  background: #000000;
   border: 1.5px solid var(--accent-gold);
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-gold);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.brand-emblem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }
 
 .brand-emblem svg {
