@@ -2062,8 +2062,12 @@ html.bci-accepted #bciDisclaimerModal {
   border-radius: var(--radius-md);
   max-width: 580px;
   width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 20px 50px rgba(7, 21, 39, 0.45);
   overflow: hidden;
+  position: relative;
   transition: transform 0.2s ease;
 }
 
@@ -2085,6 +2089,7 @@ html.bci-accepted #bciDisclaimerModal {
   align-items: center;
   gap: 12px;
   border-bottom: 2px solid var(--accent-gold);
+  flex-shrink: 0;
 }
 
 .bci-emblem-icon svg {
@@ -2099,11 +2104,32 @@ html.bci-accepted #bciDisclaimerModal {
   color: #FFFFFF;
 }
 
+.bci-modal-close {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.2s, background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.bci-modal-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+}
+
 .bci-modal-body {
   padding: 20px;
   color: var(--text-charcoal);
   font-size: 0.875rem;
   line-height: 1.6;
+  overflow-y: auto;
 }
 
 .bci-modal-actions {
@@ -2114,6 +2140,7 @@ html.bci-accepted #bciDisclaimerModal {
   padding: 12px 20px;
   background: var(--bg-ivory);
   border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 /* Practice Detail Modal - CRITICAL FIX: HIDDEN BY DEFAULT, SHOWN ONLY WITH .active */

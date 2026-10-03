@@ -148,8 +148,8 @@ const practiceDetails = {
   }
 };
 
-// DOM Content Loaded Handler
-document.addEventListener('DOMContentLoaded', () => {
+// App Initialization Handler
+function initApp() {
   initBCIDisclaimer();
   initNavbar();
   initPracticeFilter();
@@ -159,51 +159,74 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initSmoothScroll();
   initLanguageSwitcher();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 /* ==========================================================================
    1. BAR COUNCIL OF INDIA DISCLAIMER MODAL
    ========================================================================== */
+function closeBCIDisclaimer() {
+  const modal = document.getElementById('bciDisclaimerModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }
+  document.documentElement.classList.add('bci-accepted');
+  document.body.classList.remove('has-bci-modal');
+  document.body.style.overflow = '';
+  try {
+    sessionStorage.setItem('bci_disclaimer_accepted', 'true');
+  } catch (err) {}
+}
+window.closeBCIDisclaimer = closeBCIDisclaimer;
+
 function initBCIDisclaimer() {
   const modal = document.getElementById('bciDisclaimerModal');
   const acceptBtn = document.getElementById('btnAcceptDisclaimer');
   const declineBtn = document.getElementById('btnDeclineDisclaimer');
+  const closeBtn = document.getElementById('btnCloseDisclaimer');
   const showBtn = document.getElementById('btnShowDisclaimer');
 
   if (!modal) return;
 
-  // Clear any old permanent localStorage acceptance that caused auto-hiding
+  // Clear any permanent localStorage acceptance so it shows on every fresh session
   try {
     localStorage.removeItem('bci_disclaimer_accepted');
   } catch (err) {}
 
-  const isAccepted = sessionStorage.getItem('bci_disclaimer_accepted') === 'true';
+  let isAccepted = false;
+  try {
+    isAccepted = sessionStorage.getItem('bci_disclaimer_accepted') === 'true';
+  } catch (err) {
+    isAccepted = false;
+  }
 
   if (!isAccepted) {
     modal.classList.remove('hidden');
+    modal.style.display = 'flex';
     document.documentElement.classList.remove('bci-accepted');
     document.body.classList.add('has-bci-modal');
   } else {
     modal.classList.add('hidden');
+    modal.style.display = 'none';
     document.documentElement.classList.add('bci-accepted');
     document.body.classList.remove('has-bci-modal');
+    document.body.style.overflow = '';
   }
 
-  // Prevent accidental closure: clicking backdrop outside the box does NOT close
+  // Clicking backdrop outside the box closes the modal
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      e.preventDefault();
-      e.stopPropagation();
-      const modalBox = modal.querySelector('.bci-modal-box');
-      if (modalBox) {
-        modalBox.classList.remove('bci-shake');
-        void modalBox.offsetWidth; // trigger reflow
-        modalBox.classList.add('bci-shake');
-      }
+      closeBCIDisclaimer();
     }
   });
 
-  // Stop clicks inside modal box from bubbling
+  // Stop clicks inside modal box from bubbling to backdrop
   const modalBox = modal.querySelector('.bci-modal-box');
   if (modalBox) {
     modalBox.addEventListener('click', (e) => {
@@ -211,25 +234,30 @@ function initBCIDisclaimer() {
     });
   }
 
-  // Accept button: ONLY THIS closes the modal and permits browsing
+  // Accept button
   if (acceptBtn) {
     acceptBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      sessionStorage.setItem('bci_disclaimer_accepted', 'true');
-      modal.classList.add('hidden');
-      document.documentElement.classList.add('bci-accepted');
-      document.body.classList.remove('has-bci-modal');
-      document.body.style.overflow = '';
+      closeBCIDisclaimer();
     });
   }
 
-  // Decline button: Exits away from the website
+  // Close 'X' button
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeBCIDisclaimer();
+    });
+  }
+
+  // Decline button: also closes the modal gracefully
   if (declineBtn) {
     declineBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = 'https://www.google.com';
+      closeBCIDisclaimer();
     });
   }
 
@@ -238,6 +266,7 @@ function initBCIDisclaimer() {
     showBtn.addEventListener('click', (e) => {
       e.preventDefault();
       modal.classList.remove('hidden');
+      modal.style.display = 'flex';
       document.documentElement.classList.remove('bci-accepted');
       document.body.classList.add('has-bci-modal');
     });
