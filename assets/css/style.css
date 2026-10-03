@@ -366,6 +366,8 @@ iframe.goog-te-banner-frame,
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
 .brand-emblem {
@@ -390,9 +392,18 @@ iframe.goog-te-banner-frame,
   display: block;
 }
 
-.brand-emblem svg {
-  width: 20px;
-  height: 20px;
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.15;
+}
+
+.brand-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .brand-name {
@@ -400,12 +411,22 @@ iframe.goog-te-banner-frame,
   font-size: 1.12rem;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.2;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.brand-deg {
+  font-size: 0.72rem;
+  color: var(--accent-gold-light);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .brand-title {
   font-size: 0.72rem;
   color: var(--accent-gold-light);
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .nav-menu {
@@ -2498,58 +2519,70 @@ html.bci-accepted #bciDisclaimerModal {
   }
 
   .navbar {
-    height: 56px;
+    height: 58px;
   }
 
   .brand-logo {
     gap: 8px;
+    flex-shrink: 0;
+    min-width: 0;
   }
 
   .brand-emblem {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
   }
 
-  .brand-emblem svg {
-    width: 17px;
-    height: 17px;
+  .brand-text {
+    min-width: 0;
+  }
+
+  .brand-name-row {
+    gap: 4px;
+    white-space: nowrap;
   }
 
   .brand-name {
-    font-size: 0.98rem;
+    font-size: 0.94rem;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .brand-deg {
+    display: none; /* Hide degree on mobile so ADV. GOPAL TIWARI is 100% visible and never wrapped */
   }
 
   .brand-title {
-    font-size: 0.68rem;
+    font-size: 0.66rem;
+    line-height: 1.15;
+    white-space: nowrap;
   }
 
-  /* Hide navbar consult button text on tiny screens to avoid squishing logo */
+  /* Free up space on mobile navbar so brand logo is never squished */
   .nav-cta-group {
     gap: 6px;
-  }
-
-  .nav-lang-selector {
-    height: 32px;
-    padding: 0 2px 0 5px;
-  }
-
-  .nav-lang-icon {
-    width: 13px;
-    height: 13px;
-  }
-
-  .goog-te-gadget .goog-te-combo {
-    max-width: 90px;
-    font-size: 0.72rem !important;
-    padding-right: 14px !important;
-  }
-
-  .btn-consult-nav span {
-    display: none;
+    flex-shrink: 0;
   }
 
   .btn-consult-nav {
-    padding: 6px 10px;
+    display: none !important; /* Consultation button is in hero and mobile menu */
+  }
+
+  .nav-lang-selector {
+    height: 30px;
+    padding: 0 4px;
+  }
+
+  .nav-lang-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .goog-te-gadget .goog-te-combo {
+    max-width: 72px !important;
+    font-size: 0.70rem !important;
+    padding-right: 10px !important;
   }
 
   /* Hero Section Full Width Touch Actions */
@@ -2721,6 +2754,26 @@ html.bci-accepted #bciDisclaimerModal {
   .back-to-top {
     width: 36px;
     height: 36px;
+  }
+}
+
+/* Extra Compact Phones (<= 380px) */
+@media (max-width: 380px) {
+  .brand-emblem {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-name {
+    font-size: 0.86rem;
+  }
+
+  .brand-title {
+    font-size: 0.60rem;
+  }
+
+  .goog-te-gadget .goog-te-combo {
+    max-width: 64px !important;
   }
 }
 
