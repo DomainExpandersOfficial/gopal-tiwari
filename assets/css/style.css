@@ -868,15 +868,135 @@ iframe.goog-te-banner-frame,
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   border: 1.5px solid var(--accent-gold);
-  background: #FFFFFF;
+  background: #0B1F3A;
   padding: 5px;
+  position: relative;
 }
 
-.about-image-wrapper img {
+.about-carousel-slides {
+  position: relative;
   width: 100%;
-  height: 350px;
-  object-fit: cover;
+  height: 380px;
+  overflow: hidden;
   border-radius: var(--radius-sm);
+  background: #071527;
+}
+
+.about-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(1.03);
+}
+
+.about-carousel-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.about-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.carousel-slide-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: rgba(7, 21, 39, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #FFFFFF;
+  border: 1px solid var(--accent-gold);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Carousel Nav Buttons */
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(7, 21, 39, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  opacity: 0.4;
+  transition: opacity 0.25s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.about-carousel-wrapper:hover .carousel-nav-btn {
+  opacity: 1;
+}
+
+.carousel-nav-btn:hover {
+  background: var(--accent-gold);
+  color: var(--primary-navy);
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.carousel-nav-btn.prev {
+  left: 12px;
+}
+
+.carousel-nav-btn.next {
+  right: 12px;
+}
+
+/* Carousel Indicators (Dots) */
+.carousel-dots {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 5;
+  background: rgba(7, 21, 39, 0.75);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(176, 141, 87, 0.35);
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+  width: 22px;
+  border-radius: var(--radius-full);
+  background: var(--accent-gold);
 }
 
 .about-quote-card {

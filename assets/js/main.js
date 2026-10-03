@@ -152,6 +152,7 @@ const practiceDetails = {
 function initApp() {
   initBCIDisclaimer();
   initNavbar();
+  initAboutCarousel();
   initPracticeFilter();
   initPracticeModal();
   initFAQAccordion();
@@ -332,6 +333,119 @@ function initNavbar() {
       }
     }
   });
+}
+
+/* ==========================================================================
+   2B. ABOUT PHOTO AUTO-SWIPE CAROUSEL
+   ========================================================================== */
+function initAboutCarousel() {
+  const wrapper = document.getElementById('aboutCarousel');
+  if (!wrapper) return;
+
+  const slides = wrapper.querySelectorAll('.about-carousel-slide');
+  const dots = wrapper.querySelectorAll('.carousel-dot');
+  const prevBtn = document.getElementById('carouselPrevBtn');
+  const nextBtn = document.getElementById('carouselNextBtn');
+
+  if (slides.length <= 1) return;
+
+  let currentIndex = 0;
+  let timer = null;
+  const interval = 3500; // 3.5 seconds auto swipe
+
+  function showSlide(index) {
+    if (index >= slides.length) index = 0;
+    if (index < 0) index = slides.length - 1;
+    currentIndex = index;
+
+    slides.forEach((slide, i) => {
+      if (i === currentIndex) {
+        slide.classList.add('active');
+      } else {
+        slide.classList.remove('active');
+      }
+    });
+
+    dots.forEach((dot, i) => {
+      if (i === currentIndex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+  }
+
+  function nextSlide() {
+    showSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentIndex - 1);
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    timer = setInterval(nextSlide, interval);
+  }
+
+  function stopAutoPlay() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      nextSlide();
+      startAutoPlay();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      prevSlide();
+      startAutoPlay();
+    });
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      showSlide(i);
+      startAutoPlay();
+    });
+  });
+
+  // Pause on hover
+  wrapper.addEventListener('mouseenter', stopAutoPlay);
+  wrapper.addEventListener('mouseleave', startAutoPlay);
+
+  // Mobile Touch Swipe Support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  wrapper.addEventListener('touchstart', (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchStartX = e.changedTouches[0].screenX;
+    }
+    stopAutoPlay();
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', (e) => {
+    if (e.changedTouches && e.changedTouches[0]) {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 40) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 40) {
+        prevSlide();
+      }
+    }
+    startAutoPlay();
+  }, { passive: true });
+
+  startAutoPlay();
 }
 
 /* ==========================================================================
